@@ -2,7 +2,7 @@ use core::panic;
 
 use bevy::{prelude::{Plugin, Res, Input, Transform, With, Query, KeyCode, Quat, Commands, Color, Rect, Vec2, Vec3, Without}, sprite::{SpriteBundle, Sprite}};
 
-use crate::{components::{FrontWheel, Wheel, Car, RearWheel, Velocity, Acceleration}, CAR_ACCELERATION, CAR_DECELERATION, CAR_WHEEL_BASE, WHEEL_HEIGHT, WHEEL_WIDTH, CAR_WIDTH, CAR_LENGTH, CAR_MAX_SPEED, CAR_BRAKING_ACCELERATION, WHEEL_TURN_ANGLE_MULT};
+use crate::{components::{FrontWheel, Wheel, Car, RearWheel, Velocity, Acceleration}, CAR_ACCELERATION, CAR_DECELERATION, CAR_WHEEL_BASE, WHEEL_HEIGHT, WHEEL_WIDTH, CAR_WIDTH, CAR_LENGTH, CAR_MAX_SPEED, CAR_BRAKING_ACCELERATION, WHEEL_TURN_ANGLE_MULT, CAR_AIR_RESISTANCE};
 
 pub struct CarPlugin;
 
@@ -23,7 +23,7 @@ fn car_move_system(
 ) {
     if let Ok((mut car, mut vel, acc)) = car_query.get_single_mut() {
         vel.0 += acc.0;
-        vel.0 = vel.0.clamp(0., CAR_MAX_SPEED);
+        vel.0 = vel.0.clamp(-CAR_MAX_SPEED, CAR_MAX_SPEED);
 
         let wheel = front_wheel_query.iter().next().unwrap().1;
         let mut turn_amt = 0.;
@@ -56,18 +56,16 @@ fn car_keyboard_control_system(
 
     let mut kb_pressed = false;
     if kb.pressed(KeyCode::W) || kb.pressed(KeyCode::Up) {
-        //acc.x += CAR_ACCELERATION;
-        acc.0 = CAR_ACCELERATION;
+        acc.0 = (CAR_ACCELERATION - (vel.0 * CAR_AIR_RESISTANCE)).max(0.);
         kb_pressed = true;
     }
     if kb.pressed(KeyCode::S) || kb.pressed(KeyCode::Down) {
-        //acc.x -= CAR_ACCELERATION;
-        acc.0 = -CAR_BRAKING_ACCELERATION;
+        acc.0 = (-CAR_BRAKING_ACCELERATION - (vel.0 * CAR_AIR_RESISTANCE)).min(0.);
         kb_pressed = true;
     }
 
     if !kb_pressed {
-        if vel.0 < 0.2 {
+        if vel.0 < 0.2 && vel.0 > -0.2 {
             vel.0 = 0.;
             acc.0 = 0.;
             return;
@@ -142,7 +140,7 @@ fn wheel_keyboard_control_system(
     };
 
     for (mut transform, mut wheel ) in wheel_query.iter_mut() {
-        wheel.turn_angle = (0.785398 - (vel.0 * WHEEL_TURN_ANGLE_MULT)).max(0.01);
+        wheel.turn_angle = (0.785398 - (vel.0.abs() * WHEEL_TURN_ANGLE_MULT)).max(0.01);
         if turn_state == 0 {
             transform.rotation = car.rotation;
             wheel.turn_state = 0;

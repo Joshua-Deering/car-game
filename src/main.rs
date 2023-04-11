@@ -8,11 +8,11 @@ mod car;
 const CAR_WIDTH: f32 = 50.;
 const CAR_LENGTH: f32 = 100.;
 const CAR_WHEEL_BASE: f32 = 80.;
-const CAR_ACCELERATION: f32 = 0.1;
+const CAR_ACCELERATION: f32 = 0.2;
 const CAR_AIR_RESISTANCE: f32 = 0.01; //for reducing acceleration based on speed (i.e car accelerates slower at high speeds)
 const CAR_DECELERATION: f32 = 0.01;
-const CAR_BRAKING_ACCELERATION: f32 = 0.5;
-const CAR_MAX_SPEED: f32 = 50.;
+const CAR_BRAKING_ACCELERATION: f32 = 0.2;
+const CAR_MAX_SPEED: f32 = 50.; // hard max speed (car may reach actual max speed due to air resistance)
 
 //wheel constants
 const WHEEL_HEIGHT: f32 = 20.;
