@@ -5,13 +5,13 @@ mod components;
 mod car;
 
 //car constants
-const CAR_WIDTH: f32 = 50.;
-const CAR_LENGTH: f32 = 100.;
-const CAR_WHEEL_BASE: f32 = 80.;
-const CAR_ACCELERATION: f32 = 0.2;
+const CAR_WIDTH: f32 = 50.; //width of body of car
+const CAR_LENGTH: f32 = 100.; //length of body of car
+const CAR_WHEEL_BASE: f32 = 80.; //distance between centres of wheels
+const CAR_ACCELERATION: f32 = 0.2; //base acceleration
 const CAR_AIR_RESISTANCE: f32 = 0.01; //for reducing acceleration based on speed (i.e car accelerates slower at high speeds)
-const CAR_DECELERATION: f32 = 0.01;
-const CAR_BRAKING_ACCELERATION: f32 = 0.2;
+const CAR_DECELERATION: f32 = 0.01; //drag/parasitic losses
+const CAR_BRAKING_ACCELERATION: f32 = 0.2; //acceleration under braking
 const CAR_MAX_SPEED: f32 = 50.; // hard max speed (car may reach actual max speed due to air resistance)
 
 //wheel constants
