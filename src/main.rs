@@ -4,10 +4,20 @@ use car::CarPlugin;
 mod components;
 mod car;
 
-//resources
-
+//car constants
+const CAR_WIDTH: f32 = 50.;
+const CAR_LENGTH: f32 = 100.;
+const CAR_WHEEL_BASE: f32 = 80.;
 const CAR_ACCELERATION: f32 = 0.1;
-const CAR_DECELERATION: f32 = 0.1;
+const CAR_AIR_RESISTANCE: f32 = 0.01; //for reducing acceleration based on speed (i.e car accelerates slower at high speeds)
+const CAR_DECELERATION: f32 = 0.01;
+const CAR_BRAKING_ACCELERATION: f32 = 0.5;
+const CAR_MAX_SPEED: f32 = 50.;
+
+//wheel constants
+const WHEEL_HEIGHT: f32 = 20.;
+const WHEEL_WIDTH: f32 = 10.;
+const WHEEL_TURN_ANGLE_MULT: f32 = 0.05;
 
 fn main() {
     App::new()
