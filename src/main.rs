@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 use car::CarPlugin;
+use components::Car;
 
 mod components;
 mod car;
@@ -32,6 +33,7 @@ fn main() {
         }))
         .add_plugin(CarPlugin)
         .add_startup_system(setup_system)
+        .add_system(camera_follow_system)
         .run()
 }
 
@@ -39,6 +41,24 @@ fn setup_system(
     mut commands: Commands
 ) {
     commands.spawn(Camera2dBundle::default());
+}
+
+fn camera_follow_system(
+    mut camera_query: Query<&mut Transform, With<Camera>>,
+    car_query: Query<&mut Transform, (With<Car>, Without<Camera>)>
+) {
+    todo!("this does not work");
+    // for mut camera in camera_query.iter_mut() {
+    //     let car_tf = car_query.get_single().unwrap().translation;
+    //     let car_tf2d = Vec2::new(car_tf.x, car_tf.y);
+    //     let cam_2d = Vec2::new(camera.translation.x, camera.translation.y);
+    //     if cam_2d.distance(car_tf2d) < 100. {
+    //         continue;
+    //     }
+    //     let diff = car_tf2d - cam_2d;
+    //     println!("{:?}", diff);
+    //     camera.translation += Vec3::new((diff/30.).x, (diff/30.).y, 0.);
+    // }
 }
 
 // fn move_system(
